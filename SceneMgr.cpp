@@ -2,11 +2,14 @@
 #include "Config.h"
 #include "Game.h"
 #include "Menu.h"
+#include "Help.h"
+#include "End.h"
 #include "SceneMgr.h"
 static eScene mScene = eScene_Menu; //シーン管理変数
 static eScene mNextScene = eScene_None; //次のシーン管理変数
 static void SceneMgr_InitializeModule(eScene scene);//指定モジュールを初期化する
 static void SceneMgr_FinalizeModule(eScene scene);//指定モジュールの終了処理を行う
+
 //初期化
 void SceneMgr_Initialize() {
 	SceneMgr_InitializeModule(mScene);
@@ -33,6 +36,11 @@ void SceneMgr_Update() {
 	case eScene_Config:
 		Config_Update();
 		break;
+	case eScene_Help:
+		Help_Update();
+		break;
+	case eScene_End:
+		break;
 	}
 }
 //描画
@@ -46,6 +54,12 @@ void SceneMgr_Draw() {
 		break;
 	case eScene_Config:
 		Config_Draw();
+		break;
+	case eScene_Help:
+		Help_Draw();
+		break;
+	case eScene_End:
+		End_Draw();
 		break;
 	}
 }
@@ -66,6 +80,12 @@ static void SceneMgr_InitializeModule(eScene scene) {
 	case eScene_Config:
 		Config_Initialize();
 		break;
+	case eScene_Help:
+		Help_Initialize();
+		break;
+	case eScene_End:
+		End_Initialize();
+		break;
 	}
 }
 // 引数sceneモジュールの終了処理を行う
@@ -81,5 +101,22 @@ static void SceneMgr_FinalizeModule(eScene scene) {
 	case eScene_Config:
 		Config_Finalize();
 		break;
+	case eScene_Help:
+		Help_Finalize();
+		break;
+	case eScene_End:
+		End_Finalize();
+		break;
+	}
+}
+
+// メニューで”ゲームエンド”が選択されたかどうかを返す
+int SceneMgr_GameEnd_Status() {
+	if (mScene == eScene_Stop) {
+		return 1;
+	}
+	else
+	{
+		return 0;
 	}
 }
